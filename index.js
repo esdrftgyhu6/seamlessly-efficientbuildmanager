@@ -1,28 +1,18 @@
-function reorderList(head) {
-  if (!head || !head.next) return;
-  let slow = head;
-  let fast = head;
-  while (fast.next && fast.next.next) {
-    slow = slow.next;
-    fast = fast.next.next;
+function isValidSudoku(board) {
+  const rows = new Array(9).fill().map(() => new Array(9).fill(0));
+  const cols = new Array(9).fill().map(() => new Array(9).fill(0));
+  const boxes = new Array(9).fill().map(() => new Array(9).fill(0));
+  for (let i = 0; i < 9; i++) {
+    for (let j = 0; j < 9; j++) {
+      if (board[i][j] !== ".") {
+        const num = Number(board[i][j]) - 1;
+        const k = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+        if (rows[i][num] || cols[j][num] || boxes[k][num]) return false;
+        rows[i][num] = 1;
+        cols[j][num] = 1;
+        boxes[k][num] = 1;
+      }
+    }
   }
-  let prev = null;
-  let curr = slow.next;
-  slow.next = null;
-  while (curr) {
-    const next = curr.next;
-    curr.next = prev;
-    prev = curr;
-    curr = next;
-  }
-  let first = head;
-  let second = prev;
-  while (second.next) {
-    const next = first.next;
-    first.next = second;
-    first = next;
-    const next2 = second.next;
-    second.next = first;
-    second = next2;
-  }
+  return true;
 }
