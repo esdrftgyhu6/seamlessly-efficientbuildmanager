@@ -1,19 +1,28 @@
-function uniquePathsWithObstacles(obstacleGrid) {
-  const m = obstacleGrid.length;
-  const n = obstacleGrid[0].length;
-  const dp = new Array(m).fill(0).map(() => new Array(n).fill(0));
-  if (obstacleGrid[0][0] === 1) return 0;
-  dp[0][0] = 1;
-  for (let i = 1; i < m; i++) {
-    if (obstacleGrid[i][0] === 0) dp[i][0] = dp[i - 1][0];
-  }
-  for (let j = 1; j < n; j++) {
-    if (obstacleGrid[0][j] === 0) dp[0][j] = dp[0][j - 1];
-  }
-  for (let i = 1; i < m; i++) {
-    for (let j = 1; j < n; j++) {
-      if (obstacleGrid[i][j] === 0) dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+const pancakeSort = (arr) => {
+  const flip = (arr, k) => {
+    let i = 0;
+    while (i < k / 2) {
+      [arr[i], arr[k - i]] = [arr[k - i], arr[i]];
+      i++;
     }
+  };
+  const findMaxIndex = (arr, n) => {
+    let maxIndex = 0;
+    for (let i = 0; i < n; i++) {
+      if (arr[i] > arr[maxIndex]) {
+        maxIndex = i;
+      }
+    }
+    return maxIndex;
+  };
+  let currentSize = arr.length;
+  while (currentSize > 1) {
+    const maxIndex = findMaxIndex(arr, currentSize);
+    if (maxIndex !== currentSize - 1) {
+      flip(arr, maxIndex);
+      flip(arr, currentSize - 1);
+    }
+    currentSize--;
   }
-  return dp[m - 1][n - 1];
-}
+  return arr;
+};
